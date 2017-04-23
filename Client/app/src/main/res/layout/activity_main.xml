@@ -6,20 +6,53 @@
     android:layout_height="match_parent"
     tools:context="com.eduparra.client.MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Server Message"
-        tools:layout_editor_absoluteX="146dp"
-        tools:layout_editor_absoluteY="83dp" />
+    <TableLayout
+        android:layout_width="119dp"
+        android:layout_height="495dp"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="start"
-        android:text="Start Client"
-        tools:layout_editor_absoluteX="135dp"
-        tools:layout_editor_absoluteY="173dp" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Server Message"
+                tools:layout_editor_absoluteX="146dp"
+                tools:layout_editor_absoluteY="83dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="start"
+                android:text="Stop Client"
+                tools:layout_editor_absoluteX="135dp"
+                tools:layout_editor_absoluteY="173dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/accelerometerMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+        </TableRow>
+    </TableLayout>
+
 </android.support.constraint.ConstraintLayout>

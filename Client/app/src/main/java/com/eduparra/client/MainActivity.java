@@ -1,5 +1,10 @@
 package com.eduparra.client;
 
+import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -12,30 +17,51 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener{
 
     TextView serverMessage;
     Thread m_objThreadClient;
     Socket clientSocket;
+    Sensor accelerometer;
+    SensorManager sm;
+    TextView acceleration;
+    ObjectOutputStream oos;
+    ObjectInputStream ois;
+    String accelerometerMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         serverMessage = (TextView)findViewById(R.id.textView);
+
+        sm=(SensorManager)getSystemService(SENSOR_SERVICE);
+        accelerometer=sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        //sm.registerListener(this,accelerometer,SensorManager.SENSOR_DELAY_NORMAL);
+
+        acceleration = (TextView)findViewById(R.id.accelerometerMessage);
+        this.start();
     }
 
-    public void start(View view)
+    public void onClick(View view)
     {
-     m_objThreadClient = new Thread(new Runnable() {
+        //this.onPause();
+        Intent intent = new Intent(view.getContext(),StarterActivity.class);
+        startActivity(intent);
+    }
+
+    public void start()
+    {
+        this.onResume();
+        m_objThreadClient = new Thread(new Runnable() {
          @Override
          public void run() {
              try {
                  clientSocket = new Socket("127.0.0.1", 2001);
-                 ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
-                 oos.writeObject("Hello");
+                 oos = new ObjectOutputStream(clientSocket.getOutputStream());
+                 oos.writeObject(accelerometerMessage);
                  Message serverMessage = Message.obtain();
-                 ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
+                 ois = new ObjectInputStream(clientSocket.getInputStream());
                  String strMessage = (String) ois.readObject();
                  serverMessage.obj = strMessage;
 
@@ -66,4 +92,32 @@ public class MainActivity extends AppCompatActivity {
     {
         this.serverMessage.setText(""+serverMessage);
     }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        accelerometerMessage = "X: "+event.values[0]+
+                "\nY: "+event.values[1]+
+                "\nZ: "+event.values[2];
+        acceleration.setText(accelerometerMessage);
+        //m_objThreadClient.run();
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sm.registerListener(this,accelerometer,SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sm.unregisterListener(this);
+    }
+
 }
