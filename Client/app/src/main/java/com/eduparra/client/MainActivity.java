@@ -25,8 +25,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     Sensor accelerometer;
     SensorManager sm;
     TextView acceleration;
-    String accelerometerMessage = "";
-    int i = 0;
+    String accelerometerMessage;
+    int i;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         acceleration = (TextView)findViewById(R.id.accelerometerMessage);
         //sm.registerListener(this,accelerometer,SensorManager.SENSOR_DELAY_NORMAL);
-        this.start();
+        //this.start();
     }
 
     public void onClick(View view)
@@ -50,15 +51,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         startActivity(intent);
     }
 
-    public void start()
+    /*public void start()
     {
         m_objThreadClient = new Thread(new Runnable() {
          @Override
          public void run() {
              try {
-
                  clientSocket = new Socket("127.0.0.1", 2001);
-                 ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
+                 oos = new ObjectOutputStream(clientSocket.getOutputStream());
                  oos.writeObject(accelerometerMessage); //accelerometerMessage
                  Message serverMessage = Message.obtain();
                  ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
          }
      });
         m_objThreadClient.start();
-    }
+    }*/
 
     Handler mHandler = new Handler()
     {
@@ -94,11 +94,37 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        accelerometerMessage = "X: "+event.values[0]+
-                "\nY: "+event.values[1]+
-                "\nZ: "+event.values[2];
-        acceleration.setText(accelerometerMessage);
+        i++;
+        if(i% 20==0) {
+            i = 0;
+            accelerometerMessage = "X: " + event.values[0] +
+                    "\nY: " + event.values[1] +
+                    "\nZ: " + event.values[2];
+            acceleration.setText(accelerometerMessage);
 
+            m_objThreadClient = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        clientSocket = new Socket("127.0.0.1", 2001);
+                        ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
+                        oos.writeObject(accelerometerMessage);
+                        Message serverMessage = Message.obtain();
+                        ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
+                        String strMessage = (String) ois.readObject();
+                        serverMessage.obj = strMessage;
+                        mHandler.sendMessage(serverMessage);
+                        oos.close();
+                        ois.close();
+                        clientSocket.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+            m_objThreadClient.start();
+        }
     }
 
     @Override

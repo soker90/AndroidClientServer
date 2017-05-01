@@ -11,9 +11,8 @@ import android.os.Handler;
 public class MyServer {
     Thread m_objThread;
     ServerSocket m_server;
-    String m_strMessage;
     DataDisplay m_dataDisplay;
-    Object m_connected;
+    int i = 0;
 
     public MyServer()
     {
@@ -40,8 +39,8 @@ public class MyServer {
                     mHandler.sendMessage(clientmessage);
                     ObjectOutputStream oos = new ObjectOutputStream(connectedSocket.getOutputStream());
                     oos.writeObject("Recived: " + strMessage);
-                    ois.close();
                     oos.close();
+                    ois.close();
                 } catch (Exception e)
                 {
                     Message msg3 = Message.obtain();
@@ -56,7 +55,9 @@ public class MyServer {
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message status) {
-            m_dataDisplay.Display(status.obj.toString());
+            m_dataDisplay.Display(status.obj.toString() + i);
+            m_objThread.start();
+
         }
     };
 
