@@ -39,10 +39,9 @@ public class MyServer {
                     clientmessage.obj = strMessage;
                     mHandler.sendMessage(clientmessage);
                     ObjectOutputStream oos = new ObjectOutputStream(connectedSocket.getOutputStream());
-                    oos.writeObject("Hai...");
+                    oos.writeObject("Recived: " + strMessage);
                     ois.close();
                     oos.close();
-                    m_server.close();
                 } catch (Exception e)
                 {
                     Message msg3 = Message.obtain();
