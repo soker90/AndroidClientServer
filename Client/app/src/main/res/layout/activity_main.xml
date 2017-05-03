@@ -16,13 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Server Message"
-                tools:layout_editor_absoluteX="146dp"
-                tools:layout_editor_absoluteY="83dp" />
         </TableRow>
 
         <TableRow
@@ -34,11 +27,11 @@
             android:layout_height="match_parent" >
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/btnStart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onClick"
-                android:text="Stop Client"
+                android:text="Start Client"
                 tools:layout_editor_absoluteX="135dp"
                 tools:layout_editor_absoluteY="173dp" />
         </TableRow>
@@ -47,11 +40,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-            <TextView
-                android:id="@+id/accelerometerMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
         </TableRow>
     </TableLayout>
 

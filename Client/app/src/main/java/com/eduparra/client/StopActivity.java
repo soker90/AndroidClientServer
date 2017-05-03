@@ -5,17 +5,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-public class StarterActivity extends AppCompatActivity {
+public class StopActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_starter);
+        setContentView(R.layout.activity_stop);
     }
 
     public void onClick(View view)
     {
-        Intent intent = new Intent(view.getContext(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
+        ReadingSensors.terminate();
+        stopService(new Intent(this,ReadingSensors.class));
+        startActivity(new Intent(this, MainActivity.class));
     }
 }
